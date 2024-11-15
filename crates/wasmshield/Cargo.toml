@@ -1,0 +1,10 @@
+[package]
+name = "wasmshield"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rustsec = { path = "../../../rustsec/rustsec" }
+cargo-audit = { path = "../../../rustsec/cargo-audit" }
+anyhow = "1.0.93"
+toml = "0.8.19"

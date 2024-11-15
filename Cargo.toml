@@ -1,6 +1,20 @@
 [package]
-name = "wasmshield"
+name = "wasmshield-cli"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = "1.0.93"
+clap = { version = "4.5.21" }
+rustsec = { path = "../rustsec/rustsec" }
+toml = "0.8.19"
+wasmshield = { path = "./crates/wasmshield" }
+
+[features]
+default = [
+  "sbom",
+  "signature"
+]
+
+sbom = []
+signature = []

@@ -1,3 +1,7 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+//! The Wasmshield command line interface (CLI) crate.
+//!
+//! This crate implements the Wasmshield command line tools.
+
+#![deny(missing_docs)]
+
+pub mod commands;
