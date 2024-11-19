@@ -1,3 +1,5 @@
+use wasmparser::Payload;
+
 /// For now, this decomposition can only identify signed components, other components are ignored.
 pub fn decompose(file_contents: &[u8]) -> Vec<Vec<u8>> {
     split_composition(file_contents)
@@ -38,4 +40,46 @@ fn split_composition(composition: &[u8]) -> Vec<Vec<u8>> {
     }
 
     components
+}
+
+
+/// Remove last couple of bytes from an extracted component, this is to be able to verify it's signature. These bytes are not part of the component.
+pub fn clean_extracted(extracted: &Vec<u8>) -> Vec<u8> {
+    let mut end_last_section = 0;
+    for payload in wasmparser::Parser::new(0).parse_all(&extracted) {
+        match payload {
+            Ok(Payload::CustomSection(reader)) => {
+                // The last sections range end will define when the component actually ends. We can then only return up to then, we don't need the rest.
+                end_last_section = reader.range().end;
+            }
+            _ => {}
+        }
+    };
+    extracted[0..end_last_section].to_vec()
+}
+
+
+/// Attempts to return a name for a component
+pub fn get_name(file_contents: &[u8]) -> String {
+    let mut name = "UNKNOWN_NAME".to_string();
+
+    const ID_MODULE: [u8; 1] = [0x00];
+    const LEN_POS: usize = 1; // Len of name is at the second position
+    
+    for payload in wasmparser::Parser::new(0).parse_all(file_contents) {
+        match payload.map_err(|_| anyhow::Error::msg("Couldn't parse binary")) {
+            Ok(Payload::CustomSection(reader)) => {
+                if reader.name() == "name" {
+                    if reader.data().starts_with(&ID_MODULE) {
+                        name = String::from_utf8_lossy(&reader.data()[(LEN_POS+1)..(reader.data()[LEN_POS] as usize + LEN_POS + 1)]).into_owned();
+                        // The first name found describes the component, we don't need to look at the subcomponents
+                        break;
+                    }
+                }
+            }
+            // Ignore all other sections
+            _ => {}
+        }
+    }
+    name
 }

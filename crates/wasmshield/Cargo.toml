@@ -6,5 +6,7 @@ edition = "2021"
 [dependencies]
 rustsec = { path = "../../../rustsec/rustsec" }
 cargo-audit = { path = "../../../rustsec/cargo-audit" }
+wasmsign2 = { path = "../../../../work/wasmsign2/src/lib" }
+wasmparser = "0.220.0"
 anyhow = "1.0.93"
 toml = "0.8.19"

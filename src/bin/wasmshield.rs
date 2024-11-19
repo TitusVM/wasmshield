@@ -49,7 +49,6 @@ fn main() {
     }
 }
 
-/// Handle the 'sbom' command
 fn handle_sbom(matches: &ArgMatches) {
     let file = matches.get_one::<String>("COMPONENT").expect("COMPONENT is required");
     if !Path::new(file).exists() {
@@ -60,7 +59,26 @@ fn handle_sbom(matches: &ArgMatches) {
     match wasmshield_cli::commands::sbom::audit(Path::new(file)) {
         Ok(reports) => {
             for report in reports {
-                println!("Report: {:?}", report);
+                let name = report.0;
+                let report = report.1;
+                println!("Component: {}", name);
+                println!("Has: {} Vulnerabilities, {} Warnings", report.vulnerabilities.count, report.warnings.len());
+                if report.vulnerabilities.count != 0 {
+                    for vuln in report.vulnerabilities.list {
+                        println!("Vulnerability advisory: {}", vuln.advisory.title);
+                        println!("Package: {}", vuln.package.name.as_str())
+                    }
+                }
+                else if report.warnings.len() != 0 {
+                    for (_, warns) in report.warnings {
+                        for warn in warns {
+                            println!("Warning type: {:?}", warn.kind);
+                            println!("Package: {:?}", warn.package.name.as_str())
+                        }
+                    }
+                } else {
+                    println!("Nothing was found during the audit");
+                }
             }
         },
         Err(err) => {
@@ -70,7 +88,38 @@ fn handle_sbom(matches: &ArgMatches) {
     }
 }
 
-/// Handle the 'signature' command
 fn handle_signature(matches: &ArgMatches) {
+    let file = matches.get_one::<String>("COMPONENT").expect("COMPONENT is required");
+    if !Path::new(file).exists() {
+        eprintln!("Error: File '{}' does not exist.", file);
+        std::process::exit(1);
+    }
+
+    let key = matches.get_one::<String>("PUBLIC-KEY").expect("PUBLIC-KEY is required");
+    if !Path::new(key).exists() {
+        eprintln!("Error: File '{}' does not exist.", file);
+        std::process::exit(1);
+    }
+
+    let mut flag = false;
+
+    match wasmshield_cli::commands::signature::verify_signature(Path::new(file), Path::new(key)) {
+        Ok(verifications) => {
+            for verification in verifications {
+                match verification.1 {
+                    Some(err) => {
+                        flag = true;
+                        eprintln!("{} failed signature check {}", verification.0, err)
+                    }
+                    _ => {}
+                }
+            }
+        }
+        Err(err) => {
+            eprintln!("Error occured while auditing component: {}", err);
+            std::process::exit(1);
+        }
+    }
+    println!("{}", if !flag {"All signatures match"} else {"Some verifications failed"})
 
 }
