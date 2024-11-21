@@ -18,7 +18,7 @@ pub fn sbom_audit(bytes: &[u8], config: Option<&str>) -> Result<Report> {
 
     let database = get_database(&config);
     
-    let (_binary_format, report) = cargo_audit::binary_deps::load_deps_from_bytes(bytes, std::path::Path::new(""))?;
+    let (_binary_format, report) = cargo_audit::binary_deps::load_deps_from_binary(bytes, Option::None)?;
     let rustsec_report;
     match report {
         BinaryReport::Complete(lockfile) | BinaryReport::Incomplete(lockfile) => {

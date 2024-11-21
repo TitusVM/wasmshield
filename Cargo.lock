@@ -310,7 +310,9 @@ checksum = "e6e9e01327e6c86e92ec72b1c798d4a94810f147209bbe3ffab6a86954937a6f"
 
 [[package]]
 name = "cargo-audit"
-version = "0.21.0-rc.0"
+version = "0.21.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57398cd543d453b628230e3d855dcbe257a415715cb5687326a092c466d5d230"
 dependencies = [
  "abscissa_core",
  "auditable-info",
@@ -330,7 +332,9 @@ dependencies = [
 
 [[package]]
 name = "cargo-lock"
-version = "10.0.0"
+version = "10.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6469776d007022d505bbcc2be726f5f096174ae76d710ebc609eb3029a45b551"
 dependencies = [
  "petgraph",
  "semver",
@@ -493,6 +497,8 @@ checksum = "026ac6ceace6298d2c557ef5ed798894962296469ec7842288ea64674201a2d1"
 [[package]]
 name = "cvss"
 version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7ec6a2f799b0e3103192800872de17ee1d39fe0c598628277b9b012f09b4010f"
 dependencies = [
  "serde",
 ]
@@ -2088,7 +2094,9 @@ checksum = "8b870d8c151b6f2fb93e84a13146138f05d02ed11c7e7c54f8826aaaf7c9f184"
 
 [[package]]
 name = "platforms"
-version = "3.4.1"
+version = "3.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d43467300237085a4f9e864b937cf0bc012cef7740be12be1a48b10d2c8a3701"
 dependencies = [
  "serde",
 ]
@@ -2184,6 +2192,8 @@ dependencies = [
 [[package]]
 name = "quitters"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e88ccde7d84d2115b250b5cba923973fc42fe23ad42d9d63bb129d956a6db014"
 dependencies = [
  "once_cell",
  "regex",
@@ -2448,7 +2458,9 @@ dependencies = [
 
 [[package]]
 name = "rustsec"
-version = "0.30.0-rc.1"
+version = "0.30.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8e732c03323b9964936512ce0928259492e669b31f622bfa97e1fc71521c4464"
 dependencies = [
  "cargo-lock",
  "cvss",
@@ -3333,6 +3345,8 @@ dependencies = [
 [[package]]
 name = "wasmsign2"
 version = "0.2.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3dd10106b1ae31512521036659666b042ab3effaa46aba85af085d603dc094b1"
 dependencies = [
  "anyhow",
  "ct-codecs",

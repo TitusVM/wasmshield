@@ -4,9 +4,11 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-rustsec = { path = "../../../rustsec/rustsec" }
-cargo-audit = { path = "../../../rustsec/cargo-audit" }
-wasmsign2 = { path = "../../../../work/wasmsign2/src/lib" }
 wasmparser = "0.220.0"
 anyhow = "1.0.93"
 toml = "0.8.19"
+wasmsign2 = "0.2.4"
+cargo-audit = "0.21.0"
+rustsec = "0.30.0"
+
+# wasmsign2 = { git = "https://github.com/wasm-signatures/wasmsign2", rev = "82a78d5" }

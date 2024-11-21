@@ -5,10 +5,11 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.93"
-clap = { version = "4.5.21" }
-rustsec = { path = "../rustsec/rustsec" }
+clap = "4.5.21" 
+rustsec = "0.30.0"
 toml = "0.8.19"
 wasmparser = "0.220.0"
+
 wasmshield = { path = "./crates/wasmshield" }
 
 [features]
