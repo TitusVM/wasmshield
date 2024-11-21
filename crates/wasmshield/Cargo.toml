@@ -2,6 +2,10 @@
 name = "wasmshield"
 version = "0.1.0"
 edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Library for verifying Web Assembly components"
+homepage = "https://github.com/TitusVM/wasmshield"
+repository = "https://github.com/TitusVM/wasmshield"
 
 [dependencies]
 wasmparser = "0.220.0"
