@@ -2,6 +2,12 @@
 name = "wasmshield-cli"
 version = "0.1.0"
 edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "A CLI Tool for verifying Web Assembly components"
+homepage = "https://github.com/TitusVM/wasmshield"
+repository = "https://github.com/TitusVM/wasmshield"
+readme = "README.md"
+categories = ["command-line-utilities"]
 
 [dependencies]
 anyhow = "1.0.93"
