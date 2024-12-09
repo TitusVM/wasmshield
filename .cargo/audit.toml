@@ -5,6 +5,8 @@
 #
 # All of the options which can be passed via CLI arguments can also be
 # permanently specified in this file.
+# 
+# ignore_local_packages = true
 
 [advisories]
 ignore = [] # advisory IDs to ignore e.g. ["RUSTSEC-2019-0001", ...]

@@ -13,11 +13,10 @@ categories = ["command-line-utilities"]
 [dependencies]
 anyhow = "1.0.93"
 clap = "4.5.21" 
-rustsec = "0.30.0"
 toml = "0.8.19"
 wasmparser = "0.220.0"
-
 wasmshield = { version = "0.1.0", path = "./crates/wasmshield" }
+rustsec = { path = "../pr/rustsec/rustsec" }
 
 [features]
 default = [
