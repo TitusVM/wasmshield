@@ -6,6 +6,10 @@
 # All of the options which can be passed via CLI arguments can also be
 # permanently specified in this file.
 # 
+
+# This flag is not part of rustsec but of wasmshield. It enables the checking 
+# of sources from dependencies. Local dependencies may present unknown attack vectors.
+# This flag must be commented as to prevent breaking rustsec's configuration.
 # ignore_local_packages = true
 
 [advisories]
