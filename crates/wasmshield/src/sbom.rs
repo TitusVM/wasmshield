@@ -128,12 +128,14 @@ fn check_for_local_packages(lockfile: Lockfile) -> Vec<rustsec::cargo_lock::Name
 fn vet_component(bytes: &[u8]) -> Result<()> {
     use wasmparser::{Payload, Parser};
 
-    std::fs::write("vet_vuln.wasm", bytes).unwrap();
-
     for payload in Parser::new(0).parse_all(bytes) {
-        match payload.map_err(|_| anyhow::Error::msg("Couldn't parse binary")).unwrap() {
+        let payload = match payload {
+            Ok(p) => p,
+            Err(_) => continue,
+        };
+        match payload {
             Payload::CustomSection(reader) => {
-                if reader.name() == "vet-v0" {
+                if reader.name() == ".vet-v0" {
                     let data = reader.data();
                     let decompressed = miniz_oxide::inflate::decompress_to_vec_zlib(data).unwrap();
                     let json: Value = serde_json::from_slice(&decompressed).map_err(|_| anyhow::Error::msg("Couldn't parse vet_info as json"))?;
