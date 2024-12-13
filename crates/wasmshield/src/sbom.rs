@@ -1,9 +1,9 @@
 use cargo_audit::config::AuditConfig;
 use rustsec::{binary_deps::BinaryReport, Lockfile};
 use anyhow::{bail, Result};
+use serde_json::Value;
 use std::path::Path;
 use rustsec::Report;
-
 
 const AUDIT_CONFIG_PATH: &str = ".cargo/audit.toml";
 
@@ -14,13 +14,25 @@ pub fn sbom_audit(bytes: &[u8], config: Option<&str>) -> Result<Report> {
         None => std::fs::read_to_string(Path::new(AUDIT_CONFIG_PATH))?
     };
 
-    // Read ignore_local_packages from the config file
+    // Vet
+    let vet_components = toml_string.contains("vet_components = true");
+    match vet_component(bytes) {
+        Ok(_) => {}
+        Err(e) => {
+            if vet_components {
+                bail!("Vet failed: {:?}", e);
+            } else {
+                println!("Vet failed but ignoring is enabled: {:?}", e);
+            }
+        }
+    }
+
     let ignore_local_packages = toml_string.contains("ignore_local_packages = true");
 
     let config: AuditConfig = toml::from_str(&toml_string)?;
 
     let database = get_database(&config);
-    
+
     let (_binary_format, report) = rustsec::binary_deps::load_deps_from_binary(bytes, Option::None)?;
     let rustsec_report;
     match report {
@@ -84,9 +96,58 @@ fn check_for_local_packages(lockfile: Lockfile) -> Vec<rustsec::cargo_lock::Name
     let mut local_packages = Vec::new();
     for package in lockfile.packages {
         if package.source.is_none() {
-            println!("Local package found: {}", package.name);
             local_packages.push(package.name);
         }
     }
     local_packages
+}
+
+
+/// The vet_component function checks the binary for a custom section called "vet_info". This section
+/// should contain the json output of the `cargo vet` command and should look something like this:
+/// ```json
+/// {
+///   "conclusion": "success",
+///   "vetted_fully": [
+///     {
+///       "name": "bitflags",
+///       "version": "2.6.0"
+///     }
+///   ],
+///   "vetted_partially": [],
+///   "vetted_with_exemptions": [
+///     {
+///       "name": "wit-bindgen-rt",
+///       "version": "0.32.0"
+///     }
+///   ]
+/// }
+/// ```
+/// The `conclusion` field should be either "success" or "failure". If it is "failure", the function
+/// will return an error. If it is "success", the function will return Ok(()).
+fn vet_component(bytes: &[u8]) -> Result<()> {
+    use wasmparser::{Payload, Parser};
+
+    std::fs::write("vet_vuln.wasm", bytes).unwrap();
+
+    for payload in Parser::new(0).parse_all(bytes) {
+        match payload.map_err(|_| anyhow::Error::msg("Couldn't parse binary")).unwrap() {
+            Payload::CustomSection(reader) => {
+                if reader.name() == "vet-v0" {
+                    let data = reader.data();
+                    let decompressed = miniz_oxide::inflate::decompress_to_vec_zlib(data).unwrap();
+                    let json: Value = serde_json::from_slice(&decompressed).map_err(|_| anyhow::Error::msg("Couldn't parse vet_info as json"))?;
+                    let conclusion = json["conclusion"].as_str().unwrap_or("failure");
+                    if conclusion != "success" {
+                        bail!("Vet failed: {:?}", json);
+                    } else {
+                        return Ok(());
+                    }
+                }
+            }
+            // Ignore all other sections
+            _ => {}
+        }
+    }
+    bail!("Couldn't find vet_info section");
 }
