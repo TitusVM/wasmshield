@@ -2,16 +2,22 @@ use cargo_audit::config::AuditConfig;
 use rustsec::{binary_deps::BinaryReport, Lockfile};
 use anyhow::{bail, Result};
 use serde_json::Value;
-use std::path::Path;
 use rustsec::Report;
-
-const AUDIT_CONFIG_PATH: &str = ".cargo/audit.toml";
 
 /// Audit the cargo auditable information that should be backed into each component
 pub fn sbom_audit(bytes: &[u8], config: Option<&str>) -> Result<Report> {
     let toml_string = match config {
-        Some(config) => std::fs::read_to_string(config)?,
-        None => std::fs::read_to_string(Path::new(AUDIT_CONFIG_PATH))?
+        Some(config) => match std::fs::read_to_string(config) {
+            Ok(toml_string) => toml_string,
+            Err(_) => bail!("Couldn't find audit config file at specified location {}", config),
+        },
+        None => {
+            let default_path = format!("{}/.cargo/audit.toml", std::env::var("HOME").unwrap());
+            match std::fs::read_to_string(&default_path) {
+                Ok(toml_string) => toml_string,
+                Err(_) => bail!("Couldn't find audit config file at default location {}", default_path),
+            }
+        }
     };
 
     // Vet
