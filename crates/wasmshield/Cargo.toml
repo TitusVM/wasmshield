@@ -1,11 +1,13 @@
 [package]
 name = "wasmshield"
-version = "0.1.0"
-edition = "2021"
-license = "MIT OR Apache-2.0"
 description = "Library for verifying Web Assembly components"
-homepage = "https://github.com/TitusVM/wasmshield"
-repository = "https://github.com/TitusVM/wasmshield"
+homepage.workspace = true
+repository.workspace = true
+edition.workspace = true
+version.workspace = true
+authors.workspace = true
+license.workspace = true
+readme = "../../README.md"
 
 [dependencies]
 wasmparser = "0.220.0"
@@ -14,11 +16,8 @@ toml = "0.8.19"
 wasmsign2 = "0.2.6"
 # rustsec = "0.30.0"
 tempfile = "3.14.0"
-
-cargo-audit = { path = "../../../pr/rustsec/cargo-audit" }
-rustsec = { path = "../../../pr/rustsec/rustsec" }
 serde_json = "1.0.133"
 miniz_oxide = "0.8.0"
 
-#cargo-vet = { path = "../../../pr/cargo-vet"}
-#cargo_metadata = "0.19.1"
+cargo-audit = { path = "../../../pr/rustsec/cargo-audit" }
+rustsec = { path = "../../../pr/rustsec/rustsec" }

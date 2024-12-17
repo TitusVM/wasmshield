@@ -25,7 +25,7 @@ pub fn audit(path: &Path) -> Result<Vec<(String, Report)>> {
         let name = if counter == 0 {"composition".to_string()} else {wasmshield::decompose::get_name(&component)};
         // Skip the skipth component in the component list to avoid redundant reports
         if skip != counter {
-            match wasmshield::sbom::sbom_audit(&component, None) {
+            match wasmshield::sbom::sbom_audit(&component, true, None) {
                 Ok(report) => {
                     reports.push((name, report));
                 },

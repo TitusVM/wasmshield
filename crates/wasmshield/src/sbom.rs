@@ -5,7 +5,7 @@ use serde_json::Value;
 use rustsec::Report;
 
 /// Audit the cargo auditable information that should be backed into each component
-pub fn sbom_audit(bytes: &[u8], config: Option<&str>) -> Result<Report> {
+pub fn sbom_audit(bytes: &[u8], perform_local_check: bool, config: Option<&str>) -> Result<Report> {
     let toml_string = match config {
         Some(config) => match std::fs::read_to_string(config) {
             Ok(toml_string) => toml_string,
@@ -44,11 +44,13 @@ pub fn sbom_audit(bytes: &[u8], config: Option<&str>) -> Result<Report> {
     match report {
         BinaryReport::Complete(lockfile) | BinaryReport::Incomplete(lockfile) => {
             rustsec_report = Report::generate(&database, &lockfile, &config.report_settings());
-            let local_packages = check_for_local_packages(lockfile);
-            if !local_packages.is_empty() && !ignore_local_packages {
-                bail!("Local packages found in lockfile. Please ensure that all packages are fetched from a remote source.");
-            } else if !local_packages.is_empty() {
-                println!("Found local packages but ignoring is enabled: {:?}", local_packages);
+            if perform_local_check{
+                let local_packages = check_for_local_packages(lockfile);
+                if !local_packages.is_empty() && !ignore_local_packages {
+                    bail!("Local packages found in lockfile. Please ensure that all packages are fetched from a remote source.");
+                } else if !local_packages.is_empty() {
+                    println!("Found local package but ignoring is enabled: {:?}", local_packages);
+                }
             }
         }
         BinaryReport::None => bail!("No dependency information found! Is this a Rust executable built with cargo?")
