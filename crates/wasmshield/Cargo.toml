@@ -1,6 +1,6 @@
 [package]
 name = "wasmshield"
-description = "Library for verifying Web Assembly components"
+description = "Library for verifying WebAssembly components"
 homepage.workspace = true
 repository.workspace = true
 edition.workspace = true
