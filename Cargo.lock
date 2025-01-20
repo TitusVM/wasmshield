@@ -310,7 +310,9 @@ checksum = "e6e9e01327e6c86e92ec72b1c798d4a94810f147209bbe3ffab6a86954937a6f"
 
 [[package]]
 name = "cargo-audit"
-version = "0.21.0"
+version = "0.21.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "863b77b110eadea5f534fdae83767cc3efde36ca7d195492327d3c532a4ee5e0"
 dependencies = [
  "abscissa_core",
  "cargo-lock",
@@ -325,7 +327,9 @@ dependencies = [
 
 [[package]]
 name = "cargo-lock"
-version = "10.0.1"
+version = "10.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c06acb4f71407ba205a07cb453211e0e6a67b21904e47f6ba1f9589e38f2e454"
 dependencies = [
  "petgraph",
  "semver",
@@ -498,6 +502,8 @@ checksum = "b916ba8ce9e4182696896f015e8a5ae6081b305f74690baa8465e35f5a142ea4"
 [[package]]
 name = "cvss"
 version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7ec6a2f799b0e3103192800872de17ee1d39fe0c598628277b9b012f09b4010f"
 dependencies = [
  "serde",
 ]
@@ -2088,6 +2094,8 @@ checksum = "8b870d8c151b6f2fb93e84a13146138f05d02ed11c7e7c54f8826aaaf7c9f184"
 [[package]]
 name = "platforms"
 version = "3.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d43467300237085a4f9e864b937cf0bc012cef7740be12be1a48b10d2c8a3701"
 dependencies = [
  "serde",
 ]
@@ -2183,6 +2191,8 @@ dependencies = [
 [[package]]
 name = "quitters"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e88ccde7d84d2115b250b5cba923973fc42fe23ad42d9d63bb129d956a6db014"
 dependencies = [
  "once_cell",
  "regex",
@@ -2446,7 +2456,9 @@ dependencies = [
 
 [[package]]
 name = "rustsec"
-version = "0.30.0"
+version = "0.30.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8f08b4e72b19c69a91bd8eb9fc2d4c9091a80df3092ddb69f8cb9994f915b7b7"
 dependencies = [
  "auditable-info",
  "auditable-serde",
@@ -3314,6 +3326,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "cargo-audit",
+ "lazy_static",
  "miniz_oxide 0.8.0",
  "rustsec",
  "serde_json",

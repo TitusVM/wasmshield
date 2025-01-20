@@ -1,5 +1,5 @@
 use cargo_audit::config::AuditConfig;
-use rustsec::{binary_deps::BinaryReport, Lockfile};
+use rustsec::{binary_scanning::BinaryReport, Lockfile};
 use anyhow::{bail, Result};
 use serde_json::Value;
 use rustsec::Report;
@@ -39,7 +39,7 @@ pub fn sbom_audit(bytes: &[u8], perform_local_check: bool, config: Option<&str>)
 
     let database = get_database(&config);
 
-    let (_binary_format, report) = rustsec::binary_deps::load_deps_from_binary(bytes, Option::None)?;
+    let (_binary_format, report) = rustsec::binary_scanning::load_deps_from_binary(bytes, Option::None)?;
     let rustsec_report;
     match report {
         BinaryReport::Complete(lockfile) | BinaryReport::Incomplete(lockfile) => {
