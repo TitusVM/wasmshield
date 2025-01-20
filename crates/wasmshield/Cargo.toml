@@ -1,13 +1,12 @@
 [package]
 name = "wasmshield"
+version = "0.1.0"
 description = "Library for verifying WebAssembly components"
-homepage.workspace = true
-repository.workspace = true
-edition.workspace = true
-version.workspace = true
-authors.workspace = true
-license.workspace = true
-readme = "../../README.md"
+homepage = "https://github.com/TitusVM/wasmshield"
+repository = "https://github.com/TitusVM/wasmshield"
+edition = "2021"
+authors = ["Titus Abele"]
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 wasmparser = "0.220.0"
