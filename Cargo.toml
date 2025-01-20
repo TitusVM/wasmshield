@@ -1,7 +1,4 @@
-[workspace]
-members = ["crates/*"]
-
-[workspace.package]
+[package]
 name = "wasmshield-cli"
 description = "A CLI Tool for verifying WebAssembly components"
 homepage = "https://github.com/TitusVM/wasmshield"
@@ -14,9 +11,15 @@ authors = ["Titus Abele"]
 license = "MIT OR Apache-2.0"
 
 
-[workspace.dependencies]
+[dependencies]
 anyhow = "1.0.93"
 clap = "4.5.21" 
 toml = "0.8.19"
 wasmparser = "0.220.0"
-wasmshield = { version = "0.1.0", path = "./crates/wasmshield" }
+rustsec = "0.30.1"
+wasmshield = { version = "0.1.0", path = "./crates/wasmshield"}
+
+[features]
+default = ["signature", "sbom"]
+signature = []
+sbom = []
